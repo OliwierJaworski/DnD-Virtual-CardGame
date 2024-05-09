@@ -1,45 +1,30 @@
 # DnD-Virtual-CardGame
 ### GOALS
-A program that simulates spell cards for a DnD 5e game with the use of the D&D 5e API
-
+A program that simulates the inventory(list of equipment cards) for a D&D 5e game
 ### Essential knowledge
--The application can be called like this:
+-The following text snippet demonstrates how the application can be called using the CLI:
 ```
-Usage:   SpellCards.exe spell-card-files [-s count-list] [-l level] [-h history-file]
+Usage:   Inventory.exe equipment-files [number-of-items] [-w max-weight] [-m money] [-c camp-file]
 Options:
-    -s count-list        Spell slots available, the list is a sequential number of spells slots of each level that is available to the player
-    -l level             Level of character
-    -h history-file      Optional history file for all used spells during play
+    number-of-items      Optional per file to define the number in the inventory﻿
+    -w max-weight        Maximum weight before becoming encumbered
+    -m money             List of coins and types (cp, sp, ep, gp, pp)
+    -c camp-file         Optional camp file for all discovered items during play that stay in camp
+ 
+Example: Inventory.exe -w 180.75 -m 4gp 42sp 69cp greatsword.json explorers-pack.json small-knife.json 2 waterskin.json leather-armor.json -c camp.log
 ```
+### Application functionality
+Highlights the fundamental functionality imposed by the teacher for a passing grade.
 ```
-Example: SpellCards.exe -s 4 3 2 -l 5 fireball.json locate-object.json counterspell.json shatter.json invisibility.json blur.json identify.json vicious-mockery.json -h history.log
+ * abbility to load in the cards
+ * user-controlled card iteration 
+ * the ability to request more information about a given card. 
+ * abbility to move said card to the users camp.
+ * abbility to calculate and display the coin value
+ * abbility to calculate the weight
+ * abbility to show the users emcumbered status.
 ```
--After loading in the spell cards, a player can circulate through his list of cards, with every card showing its own statistics. \
--Information can be requested through queries \
-```
-~/SpellCards$ The following queries are available:
-              View spell list: Returns a list of all the available spells
-              spell-name  [-at attack_type] [-ct casting_time] [-cl classes] [-co components] 
-                          [-de description] [-du duration] [-r range] ...
-```
--A player can choose to cast a spell card, depending on the players level. \
--If a player spell slot has been used or is no longe accesible by the player. Give the player a list of cards he can choose from, and add a suggestion for the spell slot. \
--If no level is provided the highest level spell is used.
-```
-~/SpellCards$ cast spell-name [-l spell-slot-level]
-```
--If spell slot history is provided through the cli then all the available spell slots aswell as the used ones should be logged.(the format is free of choice) \
-###example
-```
-~/SpellCards$ cast fireball -l 5
-              A 5th level spell slot is not available. Do you want to use a 4th spell slot?
-              The list of available spell slots is:
-              * 1st level: 2
-              * 2nd level: 1
-              * 3th level: 0
-              * 4th level: 1
-              * 5th level: 0﻿﻿
-```
+### Evaluation criteria
 - [ ] Gebruiken van juiste structuren
 - [ ] De gegevens worden juist bewaard in de juiste members van de structuren
 - [ ] Gebruik van pointers is steeds van het juiste type
@@ -49,12 +34,13 @@ Example: SpellCards.exe -s 4 3 2 -l 5 fireball.json locate-object.json countersp
 - [ ] Er wordt correct gebruikgemaakt van de arguments to main (input en output files via flags)
 - [ ] De structuur voor een linked list is juist en efficiënt voorzien
 - [ ] Functies zijn voorzien om push, pop and cycle te doen op de circulaire linked list
-- [ ] Bewaren van gemaakte keuzes in geschiedenisbestand m.b.v. file handling 
+- [ ] Bewaren van gemaakte keuzes in bestand m.b.v. file handling 
 - [ ] Parse de json data van het bestand naar de voorziene gegevensstructuur
 - [ ] Het geheel maakt gebruik van het ingeladen bestand en speelbaar deel te maken die spell slots bijhoudt
 - [ ] Het geheel werk volledig zonder crashen
 - [ ] Wekelijkse nuttige commit op GitHub (min. 5)
-- [ ] Een mooie extra eens de rest werkt (zie de lijst hieronder) :
+
+#### Een mooie extra eens de rest werkt (zie de lijst hieronder) :
 - [ ] correcte documentatie a.d.h.v. flowchart (zie miro)
 - [ ] getopt() gebruiken
 - [ ] url meegeven en inladen via netwerk-code
