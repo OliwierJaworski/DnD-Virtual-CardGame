@@ -1,5 +1,11 @@
 #include <stdio.h>
 
+#include "dependencies/Data-Related.h"
+
 int main(){
-    printf("Hello, from DND-ASSIGNMENT!\n");
+    FILE * fileptr = fopen("equipment.txt","w");
+    fetchdata(NULL,1,fileptr);
+    return 0;
 }
+
+ 

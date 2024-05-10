@@ -6,4 +6,6 @@ endif (WIN32)
 if (UNIX)
 endif (UNIX)
 
-add_executable(DND-ASSIGNMENT main.c)
+add_executable(DND-ASSIGNMENT main.c 
+               dependencies/Data-Related.c
+               dependencies/Data-Related.h)
