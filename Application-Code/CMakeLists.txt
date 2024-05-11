@@ -1,11 +1,17 @@
 cmake_minimum_required(VERSION 3.0.0)
 
+add_executable(DND-ASSIGNMENT main.c 
+               dependencies/Data-Related.c
+               dependencies/Data-Related.h)
+               
 if (WIN32)
 endif (WIN32)
 
 if (UNIX)
+find_package(CURL REQUIRED)
+target_link_libraries(DND-ASSIGNMENT CURL::libcurl ) 
 endif (UNIX)
 
-add_executable(DND-ASSIGNMENT main.c 
-               dependencies/Data-Related.c
-               dependencies/Data-Related.h)
+
+
+ 
