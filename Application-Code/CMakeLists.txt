@@ -2,7 +2,9 @@ cmake_minimum_required(VERSION 3.0.0)
 
 add_executable(DND-ASSIGNMENT main.c 
                dependencies/Data-Related.c
-               dependencies/Data-Related.h)
+               dependencies/Data-Related.h
+               dependencies/Application-Related.c
+               dependencies/Application-Related.h)
                
 if (WIN32)
 endif (WIN32)
