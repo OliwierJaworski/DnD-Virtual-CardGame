@@ -8,7 +8,7 @@ void ARG_Parser(int* argc, char* argv[])
     else{
         for(int c_arg =0; c_arg < *argc; c_arg++){
             if(argv[c_arg][0] == '-'){
-               char arg_option = (argv[c_arg][1] == '-') ? option_rewrite(&argv[c_arg][2]) : argv[c_arg][1];
+               char arg_option = (argv[c_arg][1] == '-') ? optionTOchar(&argv[c_arg][2]) : argv[c_arg][1];
                switch (arg_option)
                {
                case 'm':
@@ -33,8 +33,17 @@ void ARG_Parser(int* argc, char* argv[])
         }
     }
 }
-
-char option_rewrite(char * option){
+/*
+-w 180.75 
+greatsword.json 
+-m 4gp 42sp 69cp 
+22 explorers-pack.json
+-c camp.log 
+small-knife.json 
+2 waterskin.json 
+leather-armor.json 
+*/
+char optionTOchar(char * option){
     if( strcasecmp( "money", option ) == 0 )
         return 'm';
     if( strcasecmp( "max-weight", option ) == 0 )

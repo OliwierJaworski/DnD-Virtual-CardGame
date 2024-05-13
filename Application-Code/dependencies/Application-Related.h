@@ -4,5 +4,5 @@
 
 void ARG_Parser(int* argc, char*argv[]);
 void printUsage( char *programName );
-char option_rewrite(char * option);
+char optionTOchar(char * option);
 #endif

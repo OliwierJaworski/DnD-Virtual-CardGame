@@ -19,7 +19,6 @@ struct memory {
    int fetch_url_data(char * url, FILE * filepointer_CC);
 size_t Data_CallBack(void *data, size_t size, size_t nmemb, void *clientp);
   void throw_error(char * err_msg, int err_code);
-
 #endif
 
 
