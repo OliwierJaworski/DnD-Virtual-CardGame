@@ -14,6 +14,18 @@ struct memory {
   char *response;
   size_t size;
 };
+struct item_T{
+  char* name;
+  int amount;
+  struct item_T* next_item;
+  struct item_T* previous_item;
+};
+struct Coin_T{
+  char* currency;
+  int amount;
+  struct Coin_T* next_coin;
+  struct Coin_T* previous_coin;
+};
 
 //functions
    int fetch_url_data(char * url, FILE * filepointer_CC);

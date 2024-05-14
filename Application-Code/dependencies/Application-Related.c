@@ -1,21 +1,29 @@
 #include "Application-Related.h"
-
+#include "Player-Related.h"
 void ARG_Parser(int* argc, char* argv[])
 {
     if(*argc ==1){
         printUsage(argv[0]);
     }
     else{
-        for(int c_arg =0; c_arg < *argc; c_arg++){
-            if(argv[c_arg][0] == '-'){
-               char arg_option = (argv[c_arg][1] == '-') ? optionTOchar(&argv[c_arg][2]) : argv[c_arg][1];
+        static int c_arg_pos;
+        for(c_arg_pos =0; c_arg_pos < *argc; c_arg_pos++){
+            if(argv[c_arg_pos][0] == '-')
+            {
+               char arg_option = (argv[c_arg_pos][1] == '-') ? optionTOchar(&argv[c_arg_pos][2]) : argv[c_arg_pos][1];
                switch (arg_option)
                {
                case 'm':
-               printf("arg :m\n");
-                break;
+                    struct Float_Nleftover RESULT;
+                    while(strstr(argv[c_arg_pos],".json")==NULL && (RESULT = TO_FLOAT(argv[c_arg_pos])).leftover != NULL)
+                    {   
+                        printf("result value: %f, result leftover:%s",RESULT.value,RESULT.leftover);
+                        c_arg_pos++;
+                    }
+                    
+                    break;
                case 'w':
-               printf("arg :w\n");
+                  printf("arg :w\n");
                 break;
                case 'h':
                printf("arg :h\n");
@@ -29,20 +37,14 @@ void ARG_Parser(int* argc, char* argv[])
                default:
                 break;
                }
-               } 
+            }else if(argv[c_arg_pos][0] -'0' <=9 && argv[c_arg_pos][0] -'0' >=0)
+            {
+                
+            }
+            
         }
     }
 }
-/*
--w 180.75 
-greatsword.json 
--m 4gp 42sp 69cp 
-22 explorers-pack.json
--c camp.log 
-small-knife.json 
-2 waterskin.json 
-leather-armor.json 
-*/
 char optionTOchar(char * option){
     if( strcasecmp( "money", option ) == 0 )
         return 'm';
@@ -54,6 +56,33 @@ char optionTOchar(char * option){
         return 'h';
     if( strcasecmp( "cancel ", option ) == 0 )
         return 'x';
+}
+
+struct Float_Nleftover TO_FLOAT(char * convert_string)
+{
+    struct Float_Nleftover RESULT;
+    int C_char=0;
+    while(convert_string[C_char] != '\0')
+    {
+        if(convert_string[C_char] -'0' <=9 && convert_string[C_char] -'0' >=0)
+        {
+            RESULT.value= (RESULT.value * 10) + (convert_string[C_char] -'0');
+        }else
+        {
+            RESULT.leftover = &convert_string[C_char];
+            return RESULT;
+        }
+        C_char++;
+    }
+    return RESULT;
+}
+bool iscoin(char* arg)
+{
+
+}
+bool isitem(char* arg)
+{
+
 }
 
 void printUsage( char *programName )
