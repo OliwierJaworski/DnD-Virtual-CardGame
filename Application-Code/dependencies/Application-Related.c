@@ -6,7 +6,7 @@ void ARG_Parser(int* argc, char* argv[])
         printUsage(argv[0]);
     }
     else{
-        static int c_arg_pos;
+        int c_arg_pos;
         for(c_arg_pos =0; c_arg_pos < *argc; c_arg_pos++){
             if(argv[c_arg_pos][0] == '-')
             {
@@ -15,10 +15,15 @@ void ARG_Parser(int* argc, char* argv[])
                {
                case 'm':
                     struct Float_Nleftover RESULT;
-                    while(strstr(argv[c_arg_pos],".json")==NULL && (RESULT = TO_FLOAT(argv[c_arg_pos])).leftover != NULL)
-                    {   
+                    struct Coin_T* C_Coin = Player_inv.Coins;
+                    printf("arg value:%s\n",argv[2]);
+                    if(iscoin(argv[2], &RESULT)) // && !isitem(argv[c_arg_pos])
+                    {    
+                        C_Coin->amount = RESULT.value;
+                        C_Coin->currency = RESULT.leftover;
+                        C_Coin->next_coin = malloc(sizeof(struct Coin_T));
+                        C_Coin = C_Coin->next_coin;
                         printf("result value: %f, result leftover:%s",RESULT.value,RESULT.leftover);
-                        c_arg_pos++;
                     }
                     
                     break;
@@ -67,7 +72,7 @@ struct Float_Nleftover TO_FLOAT(char * convert_string)
         if(convert_string[C_char] -'0' <=9 && convert_string[C_char] -'0' >=0)
         {
             RESULT.value= (RESULT.value * 10) + (convert_string[C_char] -'0');
-        }else
+        }else 
         {
             RESULT.leftover = &convert_string[C_char];
             return RESULT;
@@ -76,13 +81,19 @@ struct Float_Nleftover TO_FLOAT(char * convert_string)
     }
     return RESULT;
 }
-bool iscoin(char* arg)
-{
 
+bool iscoin(char* arg, struct Float_Nleftover* datadump)
+{
+    bool result = (TO_FLOAT(arg).leftover != NULL);
+    
+    if(result) printf("iscoin\n"); else printf("isnotcoin\n");
+    return result;
 }
 bool isitem(char* arg)
 {
-
+   bool result = (strstr(arg,".json")!=NULL) ? true : false;
+   if(result) printf("isitem\n"); else printf("isnotitem\n");
+   return result;
 }
 
 void printUsage( char *programName )
