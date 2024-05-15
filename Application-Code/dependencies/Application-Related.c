@@ -6,7 +6,8 @@ void ARG_Parser(int* argc, char** argv)
         printUsage(argv[0]);
     }
     else{
-        for(int c_arg_pos =0; c_arg_pos < *argc; c_arg_pos++){
+        for(int c_arg_pos =1; c_arg_pos < *argc; c_arg_pos++)
+        {
             if(argv[c_arg_pos][0] == '-') 
             {
                char arg_option = (argv[c_arg_pos][1] == '-') ? optionTOchar(&argv[c_arg_pos][2]) : argv[c_arg_pos][1];
@@ -17,7 +18,7 @@ void ARG_Parser(int* argc, char** argv)
                     struct Float_Nleftover Temp_CoinData;
                     Player_inv.Coins = malloc(sizeof(struct Coin_T));
                     struct Coin_T* CurrentC =Player_inv.Coins;
-                    while(c_arg_pos < *argc && arg_iscoin(argv[c_arg_pos],&Temp_CoinData) &&!arg_isitem(argv[c_arg_pos]))
+                    while(c_arg_pos < *argc && arg_iscoin(argv[c_arg_pos],&Temp_CoinData) && !arg_isitem(argv[c_arg_pos]))
                     {
                         CurrentC->amount = Temp_CoinData.value;
                         CurrentC->currency = malloc(sizeof(strlen(Temp_CoinData.leftover)+1));
@@ -27,36 +28,51 @@ void ARG_Parser(int* argc, char** argv)
                         c_arg_pos++;
                     }
                     CurrentC =NULL;
-                    //testing
                     #ifdef debug
-                    CurrentC =Player_inv.Coins;
-                    while(CurrentC->next_coin != NULL)
-                    {
-                        printf("value stored in linkedlist :%d\n",CurrentC->amount);
-                        CurrentC = CurrentC->next_coin;
-                    }
+                    //tests if the values are correctly saved
+                        CurrentC =Player_inv.Coins;
+                        while(CurrentC->next_coin != NULL)
+                        {
+                            printf("value stored in linkedlist :%d\n",CurrentC->amount);
+                            CurrentC = CurrentC->next_coin;
+                        }
                     #endif
                     break;
                case 'w':
                   printf("arg :w\n");
                 break;
                case 'h':
-               printf("arg :h\n");
+                    printUsage( argv[0] );
+                    exit(0);
                 break;
                case 'c':
-               printf("arg :c\n");
+                    printf("arg :c\n");
                 break;
                case 'x':
-               printf("arg :x\n");
+                    printf("arg :x\n");
                 break;
                default:
                 break;
                }
-            }else if(argv[c_arg_pos][0] -'0' <=9 && argv[c_arg_pos][0] -'0' >=0)
-            {
-                
             }
-            
+            else if( arg_isitem( argv[c_arg_pos]) )
+            {
+                printf("argument is an item\n");
+            }
+             else if( ( argv[c_arg_pos][0] -'0' <=9 && argv[c_arg_pos][0] -'0' >=0 ) )
+            {
+                bool item_supplied = ( c_arg_pos < *argc && arg_isitem( argv[c_arg_pos+1] ) );
+                if(item_supplied)
+                {
+                    printf( "item has been supplied!\n" );
+                } 
+                else 
+                {
+                    printUsage( argv[0] );
+                    exit(0);
+                }
+                printf("argument is a digit!\n");
+            }    
         }
     }
 }
@@ -111,6 +127,10 @@ bool arg_isitem(char* arg)
    if(result) printf("isitem\n"); else printf("isnotitem\n");
    return result;
 }
+void parse_item( char* arg )
+{
+    
+}
 
 void printUsage( char *programName )
 {
@@ -123,4 +143,40 @@ void printUsage( char *programName )
 	        "  -h --help                         Print this help menu.\n"
             "  -x --cancel                       exit the application\n",
 	        programName );
+}
+
+void free_alloc( void )
+{
+    /*TO DEALLOC!!*/
+    /*
+    1.CurrentC->currency
+    2.
+    */
+   if(Player_inv.Coins != NULL)
+   {
+    struct Coin_T* old_coin =NULL;
+    struct Coin_T* next_coin = Player_inv.Coins->next_coin;
+    
+    while(next_coin != NULL)
+    {
+        old_coin= next_coin;
+        next_coin = next_coin->next_coin;
+        free(old_coin);
+    };
+    Player_inv.Coins =NULL;
+   }
+
+   if(Player_inv.items != NULL)
+   {
+    struct item_T* old_item =NULL;
+    struct item_T* next_item = Player_inv.items->next_item;
+    while(next_item != NULL)
+    {
+        old_item= next_item;
+        next_item = next_item->next_item;
+        free(old_item);
+    };
+    Player_inv.items =NULL;
+   }
+    return 0;
 }

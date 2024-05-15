@@ -1,10 +1,12 @@
 #ifndef Application_Related 
 #define Application_Related 
-#include "Data-Related.h"
 
+#include "Data-Related.h"
+#include <stdlib.h>
 #include <math.h>
 #include <stdbool.h>
 #include <string.h>
+
 struct Float_Nleftover{
     float value;
     char* leftover;
@@ -15,7 +17,9 @@ void printUsage( char *programName );
 char optionTOchar(char * option);
 struct Float_Nleftover TO_FLOAT(char * convert_string);
 bool arg_iscoin(char* arg, struct Float_Nleftover* datadump);
-bool arg_isitem(char* arg);
+bool arg_isitem( char* arg );
+void parse_item( char* arg ); 
+void free_alloc( void );
 #endif
 
 
