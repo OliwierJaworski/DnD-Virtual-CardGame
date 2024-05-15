@@ -6,6 +6,7 @@
 #include "dependencies/Application-Related.h"
 #include "dependencies/Player-Related.h"
 
+
 int free_alloc( void );
 
 struct Inventory Player_inv;
@@ -13,9 +14,9 @@ struct Inventory Player_inv;
 int main(int argc, char *argv[])
 {
 //setup
-    Player_inv.Coins = malloc(sizeof(struct Coin_T));
-    ARG_Parser(&argc, argv);
     
+    ARG_Parser(&argc, argv);
+
 //program
     
     
@@ -26,6 +27,11 @@ int main(int argc, char *argv[])
 
 int free_alloc( void )
 {
+    /*TO DEALLOC!!*/
+    /*
+    1.CurrentC->currency
+    2.
+    */
     struct Coin_T* old_coin =NULL;
     struct Coin_T* next_coin = Player_inv.Coins->next_coin;
     

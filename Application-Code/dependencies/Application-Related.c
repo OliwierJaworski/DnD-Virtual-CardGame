@@ -15,11 +15,27 @@ void ARG_Parser(int* argc, char** argv)
                case 'm':
                     c_arg_pos++;
                     struct Float_Nleftover Temp_CoinData;
+                    Player_inv.Coins = malloc(sizeof(struct Coin_T));
+                    struct Coin_T* CurrentC =Player_inv.Coins;
                     while(c_arg_pos < *argc && arg_iscoin(argv[c_arg_pos],&Temp_CoinData) &&!arg_isitem(argv[c_arg_pos]))
                     {
-                        
+                        CurrentC->amount = Temp_CoinData.value;
+                        CurrentC->currency = malloc(sizeof(strlen(Temp_CoinData.leftover)+1));
+                        strcpy(CurrentC->currency,Temp_CoinData.leftover);
+                        CurrentC->next_coin = malloc(sizeof(struct Coin_T));
+                        CurrentC = CurrentC->next_coin;
                         c_arg_pos++;
                     }
+                    CurrentC =NULL;
+                    //testing
+                    #ifdef debug
+                    CurrentC =Player_inv.Coins;
+                    while(CurrentC->next_coin != NULL)
+                    {
+                        printf("value stored in linkedlist :%d\n",CurrentC->amount);
+                        CurrentC = CurrentC->next_coin;
+                    }
+                    #endif
                     break;
                case 'w':
                   printf("arg :w\n");
