@@ -1,31 +1,25 @@
 #include "Application-Related.h"
 #include "Player-Related.h"
-void ARG_Parser(int* argc, char* argv[])
+void ARG_Parser(int* argc, char** argv)
 {
     if(*argc ==1){
         printUsage(argv[0]);
     }
     else{
-        int c_arg_pos;
-        for(c_arg_pos =0; c_arg_pos < *argc; c_arg_pos++){
-            if(argv[c_arg_pos][0] == '-')
+        for(int c_arg_pos =0; c_arg_pos < *argc; c_arg_pos++){
+            if(argv[c_arg_pos][0] == '-') 
             {
                char arg_option = (argv[c_arg_pos][1] == '-') ? optionTOchar(&argv[c_arg_pos][2]) : argv[c_arg_pos][1];
                switch (arg_option)
                {
                case 'm':
-                    struct Float_Nleftover RESULT;
-                    struct Coin_T* C_Coin = Player_inv.Coins;
-                    printf("arg value:%s\n",argv[2]);
-                    if(iscoin(argv[2], &RESULT)) // && !isitem(argv[c_arg_pos])
-                    {    
-                        C_Coin->amount = RESULT.value;
-                        C_Coin->currency = RESULT.leftover;
-                        C_Coin->next_coin = malloc(sizeof(struct Coin_T));
-                        C_Coin = C_Coin->next_coin;
-                        printf("result value: %f, result leftover:%s",RESULT.value,RESULT.leftover);
+                    c_arg_pos++;
+                    struct Float_Nleftover Temp_CoinData;
+                    while(c_arg_pos < *argc && arg_iscoin(argv[c_arg_pos],&Temp_CoinData) &&!arg_isitem(argv[c_arg_pos]))
+                    {
+                        
+                        c_arg_pos++;
                     }
-                    
                     break;
                case 'w':
                   printf("arg :w\n");
@@ -66,6 +60,8 @@ char optionTOchar(char * option){
 struct Float_Nleftover TO_FLOAT(char * convert_string)
 {
     struct Float_Nleftover RESULT;
+    RESULT.value = 0;
+    RESULT.leftover =NULL;
     int C_char=0;
     while(convert_string[C_char] != '\0')
     {
@@ -74,7 +70,7 @@ struct Float_Nleftover TO_FLOAT(char * convert_string)
             RESULT.value= (RESULT.value * 10) + (convert_string[C_char] -'0');
         }else 
         {
-            RESULT.leftover = &convert_string[C_char];
+            RESULT.leftover = &convert_string[C_char]; 
             return RESULT;
         }
         C_char++;
@@ -82,14 +78,18 @@ struct Float_Nleftover TO_FLOAT(char * convert_string)
     return RESULT;
 }
 
-bool iscoin(char* arg, struct Float_Nleftover* datadump)
-{
-    bool result = (TO_FLOAT(arg).leftover != NULL);
-    
-    if(result) printf("iscoin\n"); else printf("isnotcoin\n");
+bool arg_iscoin(char* arg, struct Float_Nleftover* datadump)
+{   
+    *datadump = TO_FLOAT(arg);
+    bool result = (datadump->leftover != NULL && datadump->value !=0);
+    if(result)
+    {
+        printf("iscoin!");
+    }
     return result;
 }
-bool isitem(char* arg)
+
+bool arg_isitem(char* arg)
 {
    bool result = (strstr(arg,".json")!=NULL) ? true : false;
    if(result) printf("isitem\n"); else printf("isnotitem\n");

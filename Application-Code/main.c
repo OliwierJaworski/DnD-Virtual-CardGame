@@ -12,12 +12,15 @@ struct Inventory Player_inv;
 
 int main(int argc, char *argv[])
 {
+//setup
     Player_inv.Coins = malloc(sizeof(struct Coin_T));
-    char* Pcamp_file; 
     ARG_Parser(&argc, argv);
-    //FILE * fileptr = fopen("equipment.txt","w");          --DEBUG
-    //fetch_url_data(DND_EQUIPMENT_URL, fileptr);           --DEBUG
     
+//program
+    
+    
+
+//cleanup
     return free_alloc;
 }
 
@@ -47,3 +50,5 @@ int free_alloc( void )
     return 0;
 }
 
+//FILE * fileptr = fopen("equipment.txt","w");          --DEBUG
+    //fetch_url_data(DND_EQUIPMENT_URL, fileptr);           --DEBUG

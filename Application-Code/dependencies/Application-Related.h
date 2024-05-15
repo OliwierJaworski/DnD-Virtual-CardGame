@@ -10,12 +10,12 @@ struct Float_Nleftover{
     char* leftover;
 };
 
-void ARG_Parser(int* argc, char*argv[]);
+void ARG_Parser(int* argc, char** argv);
 void printUsage( char *programName );
 char optionTOchar(char * option);
 struct Float_Nleftover TO_FLOAT(char * convert_string);
-bool iscoin(char* arg, struct Float_Nleftover* datadump);
-bool isitem(char* arg);
+bool arg_iscoin(char* arg, struct Float_Nleftover* datadump);
+bool arg_isitem(char* arg);
 #endif
 
 
