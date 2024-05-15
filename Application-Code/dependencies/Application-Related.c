@@ -57,14 +57,14 @@ void ARG_Parser(int* argc, char** argv)
             }
             else if( arg_isitem( argv[c_arg_pos]) )
             {
-                printf("argument is an item\n");
+                parse_item(argv[c_arg_pos],1);
             }
              else if( ( argv[c_arg_pos][0] -'0' <=9 && argv[c_arg_pos][0] -'0' >=0 ) )
             {
                 bool item_supplied = ( c_arg_pos < *argc && arg_isitem( argv[c_arg_pos+1] ) );
                 if(item_supplied)
                 {
-                    printf( "item has been supplied!\n" );
+                   parse_item(argv[c_arg_pos],1);
                 } 
                 else 
                 {
@@ -73,6 +73,12 @@ void ARG_Parser(int* argc, char** argv)
                 }
                 printf("argument is a digit!\n");
             }    
+        }
+         struct item_T* current_item = Player_inv.items;
+         while(current_item->next_item != NULL)
+        {
+           printf("value stored in linkedlist :%s\n",Player_inv.items->name);
+           current_item = current_item->next_item;
         }
     }
 }
@@ -127,9 +133,27 @@ bool arg_isitem(char* arg)
    if(result) printf("isitem\n"); else printf("isnotitem\n");
    return result;
 }
-void parse_item( char* arg )
+void parse_item( char* arg , int item_amount)
 {
-    
+    Player_inv.items = (Player_inv.items == NULL)? malloc(sizeof(struct item_T)): Player_inv.items;
+    struct item_T* curr_item = Player_inv.items;
+    while(curr_item->next_item != NULL)
+    {
+      curr_item = curr_item->next_item;
+    }
+    curr_item->next_item = malloc(sizeof(struct item_T));
+    curr_item = curr_item->next_item;
+    char filename[strlen(arg)+1];
+    strcpy(filename, arg);
+    char *loc = strstr(filename, ".json");
+    if(loc != NULL) 
+    {
+        *loc = '\0';
+    }
+    curr_item->name = malloc(strlen(filename)+1);
+    strcpy(curr_item->name, filename);
+    curr_item->amount = item_amount;
+    printf("\nitem name: %s\n", filename);
 }
 
 void printUsage( char *programName )
@@ -150,7 +174,7 @@ void free_alloc( void )
     /*TO DEALLOC!!*/
     /*
     1.CurrentC->currency
-    2.
+    2.CurrentC->item_t
     */
    if(Player_inv.Coins != NULL)
    {

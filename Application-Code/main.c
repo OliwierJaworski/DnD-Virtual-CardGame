@@ -6,9 +6,6 @@
 #include "dependencies/Application-Related.h"
 #include "dependencies/Player-Related.h"
 
-
-
-
 struct Inventory Player_inv;
 
 int main(int argc, char *argv[])

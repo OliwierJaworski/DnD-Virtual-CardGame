@@ -18,7 +18,7 @@ char optionTOchar(char * option);
 struct Float_Nleftover TO_FLOAT(char * convert_string);
 bool arg_iscoin(char* arg, struct Float_Nleftover* datadump);
 bool arg_isitem( char* arg );
-void parse_item( char* arg ); 
+void parse_item( char* arg , int item_amount); 
 void free_alloc( void );
 #endif
 
