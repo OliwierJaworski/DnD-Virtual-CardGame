@@ -74,12 +74,16 @@ void ARG_Parser(int* argc, char** argv)
                 printf("argument is a digit!\n");
             }    
         }
-         struct item_T* current_item = Player_inv.items;
-         while(current_item->next_item != NULL)
-        {
-           printf("value stored in linkedlist :%s\n",Player_inv.items->name);
-           current_item = current_item->next_item;
-        }
+        #ifdef debug
+          struct item_T* current_item = Player_inv.items;
+                   while (current_item != NULL)
+                   {
+                    printf("value stored in linkedlist :%s\n",current_item->name);
+                    current_item =current_item->next_item;
+                   }
+                   
+                    
+        #endif
     }
 }
 char optionTOchar(char * option){
@@ -135,25 +139,29 @@ bool arg_isitem(char* arg)
 }
 void parse_item( char* arg , int item_amount)
 {
-    Player_inv.items = (Player_inv.items == NULL)? malloc(sizeof(struct item_T)): Player_inv.items;
-    struct item_T* curr_item = Player_inv.items;
-    while(curr_item->next_item != NULL)
-    {
-      curr_item = curr_item->next_item;
-    }
-    curr_item->next_item = malloc(sizeof(struct item_T));
-    curr_item = curr_item->next_item;
+    struct item_T* C_item;
     char filename[strlen(arg)+1];
     strcpy(filename, arg);
+
+    if(Player_inv.items == NULL) {
+        Player_inv.items = malloc(sizeof(struct item_T));
+        C_item = Player_inv.items;
+    } else {
+        C_item = Player_inv.items;
+        while(C_item->next_item != NULL) {
+            C_item = C_item->next_item;
+        }
+        C_item->next_item = malloc(sizeof(struct item_T));
+        C_item = C_item->next_item;
+    }
+
+    C_item->name = malloc(strlen(filename)+1);
     char *loc = strstr(filename, ".json");
-    if(loc != NULL) 
-    {
+    if(loc != NULL){
         *loc = '\0';
     }
-    curr_item->name = malloc(strlen(filename)+1);
-    strcpy(curr_item->name, filename);
-    curr_item->amount = item_amount;
-    printf("\nitem name: %s\n", filename);
+    strcpy(C_item->name, filename);
+    C_item->amount = item_amount;
 }
 
 void printUsage( char *programName )
@@ -180,13 +188,11 @@ void free_alloc( void )
    {
     struct Coin_T* old_coin =NULL;
     struct Coin_T* next_coin = Player_inv.Coins->next_coin;
-    
-    while(next_coin != NULL)
-    {
+      while(next_coin != NULL){
         old_coin= next_coin;
         next_coin = next_coin->next_coin;
         free(old_coin);
-    };
+      };
     Player_inv.Coins =NULL;
    }
 
@@ -204,3 +210,31 @@ void free_alloc( void )
    }
     return 0;
 }
+
+/*void parse_item( char* arg , int item_amount)
+{
+    Player_inv.items = (Player_inv.items == NULL)? malloc(sizeof(struct item_T)): Player_inv.items;
+    struct item_T* curr_item = Player_inv.items;
+
+    while(curr_item->next_item != NULL)
+    {
+      curr_item = curr_item->next_item;
+    }
+
+    curr_item->next_item = malloc(sizeof(struct item_T));
+    curr_item = curr_item->next_item;
+
+    char filename[strlen(arg)+1];
+    strcpy(filename, arg);
+    char *loc = strstr(filename, ".json");
+    if(loc != NULL) 
+    {
+        *loc = '\0';
+    }
+
+    curr_item->name = malloc(strlen(filename)+1);
+    strcpy(curr_item->name, filename);
+    curr_item->amount = item_amount;
+    
+   
+}*/
