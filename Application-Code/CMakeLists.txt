@@ -7,8 +7,10 @@ add_executable(DND-ASSIGNMENT main.c
                dependencies/Data-Related.h
                dependencies/Application-Related.c
                dependencies/Application-Related.h
-               dependencies/Player-Related.c
-               dependencies/Player-Related.h)
+               #dependencies/Player-Related.c
+               dependencies/Player-Related.h
+               dependencies/Debug-Related.c
+               dependencies/Debug-Related.h)
                
 if (WIN32)
 endif (WIN32)

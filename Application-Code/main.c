@@ -10,16 +10,11 @@ struct Inventory Player_inv;
 
 int main(int argc, char *argv[])
 {
-//setup
     void (*cleanup_ritual) ( void ) = free_alloc;
     atexit(cleanup_ritual);
+
     ARG_Parser(&argc, argv);
 
-//program
-    
-    
-
-//cleanup
     return free_alloc;
 }
 
