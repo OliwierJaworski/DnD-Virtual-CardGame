@@ -20,17 +20,45 @@ void ARG_Parser(int* argc, char** argv)
                {
                case 'm':
                     c_argc++;
-                    Player_inv.Coins =( Player_inv.Coins == NULL)? malloc( sizeof(struct Coin_T) ): Player_inv.Coins;
-                    struct Coin_T* current_C = Player_inv.Coins;
+                    struct Coin_T* current_C=NULL;
+
+                    if( Player_inv.Coins == NULL ){
+                        Player_inv.Coins = malloc( sizeof(struct Coin_T));
+
+                        if (Player_inv.Coins == NULL) {
+                        perror("Failed to allocate memory");
+                        exit(EXIT_FAILURE);
+                        }    
+                        current_C = Player_inv.Coins;
+                
+                    } else {
+                        current_C = Player_inv.Coins;
+                        while( current_C->next_coin != NULL ){
+                         current_C = current_C->next_coin;
+                        }
+                        current_C->next_coin =malloc(sizeof(struct Coin_T));
+                        printf("current agrptr :%p\n",current_C);
+                        if (current_C->next_coin == NULL) {
+                            perror("Failed to allocate memory");
+                            exit(EXIT_FAILURE);
+                            }
+
+                        current_C = current_C->next_coin;     
+                    }
+
                     while(c_argc < *argc && arg_iscoin(argv[c_argc]))
                     {
                         current_C->amount = Str_To_Float(argv[c_argc], &current_C->currency); 
-                        if(c_argc+1 < *argc && arg_iscoin(argv[c_argc+1])){
+                        printf("current agrv :%s\n",current_C->currency);
+                        if( c_argc+1 < *argc && arg_iscoin( argv[c_argc+1] ) ){
                             current_C->next_coin = (current_C->next_coin == NULL)? malloc(sizeof(struct Coin_T)) : current_C->next_coin;
+                            if (current_C->next_coin == NULL) {
+                            perror("Failed to allocate memory");
+                            exit(EXIT_FAILURE);
+                            } 
                             current_C = current_C->next_coin;
                             c_argc++;
                         }else break;
-                         
                     }
                     break;
                case 'w':
