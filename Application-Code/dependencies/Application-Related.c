@@ -24,12 +24,13 @@ void ARG_Parser(int* argc, char** argv)
                     struct Coin_T* current_C = Player_inv.Coins;
                     while(c_argc < *argc && arg_iscoin(argv[c_argc]))
                     {
+                        current_C->amount = Str_To_Float(argv[c_argc], &current_C->currency); 
                         if(c_argc+1 < *argc && arg_iscoin(argv[c_argc+1])){
                             current_C->next_coin = (current_C->next_coin == NULL)? malloc(sizeof(struct Coin_T)) : current_C->next_coin;
-                        }
-                        current_C->amount = Str_To_Float(argv[c_argc], &current_C->currency);  
-                        current_C = current_C->next_coin;        
-                        c_argc++;
+                            current_C = current_C->next_coin;
+                            c_argc++;
+                        }else break;
+                         
                     }
                     break;
                case 'w':
@@ -72,7 +73,6 @@ void ARG_Parser(int* argc, char** argv)
 }
 float Str_To_Float( char * source_STR, char** excluded_STR )
 {
-    printf("function str_To_FLoat reached\n");
     float result =0;
     bool iscomma= false;
     int C_char = 0;
@@ -105,18 +105,13 @@ float Str_To_Float( char * source_STR, char** excluded_STR )
 bool arg_isitem( char* arg )
 {
     bool result = (strstr(arg, ".json")); //player can call .jsonn and it would still count -> BUG
-   return result;
+    return result;
 }
 bool arg_iscoin( char *arg )
 {
-    printf("function arg_iscoin reached\n");
     char* currency = NULL; 
     float CoinValue = Str_To_Float(arg, &currency);
     bool result = (currency != NULL && CoinValue != 0);
-    if (result)
-    {
-        printf("iscoin!\n");
-    }
     return result;
 }
 void parse_item( char* arg , int item_amount)
