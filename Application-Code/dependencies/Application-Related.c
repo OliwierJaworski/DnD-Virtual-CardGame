@@ -13,6 +13,13 @@ void ARG_Parser(int* argc, char** argv)
                switch (arg_option)
                {
                case 'm':
+                    c_argc++;
+                    printf("money is triggered\n");
+                    while(c_argc < *argc && arg_iscoin(argv[c_argc])){
+                        printf("argv :%s\n", argv[c_argc]);
+                        c_argc++;
+                        }
+                    
                     break;
                case 'w':
                   c_argc++;
@@ -51,8 +58,9 @@ void ARG_Parser(int* argc, char** argv)
         #endif
     }
 }
-float Str_To_Float( char * source_STR, char* excluded_STR )
+float Str_To_Float( char * source_STR, char** excluded_STR )
 {
+    printf("function str_To_FLoat reached\n");
     float result =0;
     bool iscomma= false;
     int C_char = 0;
@@ -60,7 +68,7 @@ float Str_To_Float( char * source_STR, char* excluded_STR )
     float wholevalue =0;
     float pointvalue =0;
 
-    while ( source_STR[C_char] != '\0' ){
+    while ( source_STR[C_char] != '\0' && ( (source_STR[C_char] -'0' <=9 && source_STR[C_char] -'0' >=0) || source_STR[C_char] == '.') ){
         if( source_STR[C_char] == '.' ){
         iscomma =true;
         C_char++;
@@ -73,30 +81,31 @@ float Str_To_Float( char * source_STR, char* excluded_STR )
         }
       C_char++;
     }
-    pointvalue = pointvalue / (pow(10,quotient)); 
+    if( source_STR[C_char] != '\0' ){ 
+    *excluded_STR =&source_STR[C_char]; //following format causes segmentation error :
+    // *excluded_STR =( source_STR[C_char] != '\0'  )? &source_STR[C_char] : NULL;
+    } 
+    pointvalue = pointvalue / ( pow( 10, quotient ) ); 
     result = wholevalue+pointvalue;
     return result;
 }
 
-  /*komma = (source_STR[C_char] == '.');
-        if( !komma ) {
-        if ( source_STR[C_char] - '0' <= 9 && source_STR[C_char] - '0' >= 0 ){
-            result = ( result* 10 ) + ( source_STR[C_char] - '0' );
-        } else {
-            printf("komma spotted\n");
-        }
-        }
-        else{
-            excluded_STR = ( excluded_STR != NULL )? &source_STR[C_char] : NULL;
-            return result;
-        }
-        C_char++;
-        */
-
-bool arg_isitem(char* arg)
+bool arg_isitem( char* arg )
 {
     bool result = (strstr(arg, ".json")); //player can call .jsonn and it would still count -> BUG
    return result;
+}
+bool arg_iscoin( char *arg )
+{
+    printf("function arg_iscoin reached\n");
+    char* currency = NULL; 
+    float CoinValue = Str_To_Float(arg, &currency);
+    bool result = (currency != NULL && CoinValue != 0);
+    if (result)
+    {
+        printf("iscoin!\n");
+    }
+    return result;
 }
 void parse_item( char* arg , int item_amount)
 {
