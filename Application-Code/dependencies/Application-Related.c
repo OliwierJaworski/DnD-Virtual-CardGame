@@ -15,7 +15,8 @@ void ARG_Parser(int* argc, char** argv)
                case 'm':
                     break;
                case 'w':
-                  printf("arg :w\n");
+                  c_argc++;
+                  Player_inv.weight = Str_To_Float(argv[c_argc], NULL);
                 break;
                case 'c':
                     printf("arg :c\n");
@@ -34,31 +35,71 @@ void ARG_Parser(int* argc, char** argv)
                     printUsage( argv[0] );
                     exit(0);
                 }
-                int item_amount = argv[c_argc][0]-'0';
+                int item_amount = Str_To_Float(argv[c_argc],NULL);
                 c_argc++;
                 parse_item( argv[c_argc], item_amount );
-                c_argc++;
-            }else if( arg_isitem( c_argc ) ){
+            }else if( arg_isitem( argv[c_argc] ) ){
                 parse_item( argv[c_argc], 1 );
+            } else {
+                 printUsage( argv[0] );
+                 exit(0);
             }
         }
         #ifdef debug
+               Display_Weight(Player_inv.weight);
                loop_ITEMLIST(Player_inv.items);
         #endif
     }
 }
+float Str_To_Float( char * source_STR, char* excluded_STR )
+{
+    float result =0;
+    bool iscomma= false;
+    int C_char = 0;
+    int quotient=0;
+    float wholevalue =0;
+    float pointvalue =0;
+
+    while ( source_STR[C_char] != '\0' ){
+        if( source_STR[C_char] == '.' ){
+        iscomma =true;
+        C_char++;
+        }
+        if( !iscomma ){
+           wholevalue = ( wholevalue* 10 ) + ( source_STR[C_char] - '0' );
+        }else{
+            pointvalue = ( pointvalue* 10 ) + ( source_STR[C_char] - '0' );
+            quotient++;
+        }
+      C_char++;
+    }
+    pointvalue = pointvalue / (pow(10,quotient)); 
+    result = wholevalue+pointvalue;
+    return result;
+}
+
+  /*komma = (source_STR[C_char] == '.');
+        if( !komma ) {
+        if ( source_STR[C_char] - '0' <= 9 && source_STR[C_char] - '0' >= 0 ){
+            result = ( result* 10 ) + ( source_STR[C_char] - '0' );
+        } else {
+            printf("komma spotted\n");
+        }
+        }
+        else{
+            excluded_STR = ( excluded_STR != NULL )? &source_STR[C_char] : NULL;
+            return result;
+        }
+        C_char++;
+        */
+
 bool arg_isitem(char* arg)
 {
-    printf("arg : %s\n",arg);
     bool result = (strstr(arg, ".json")); //player can call .jsonn and it would still count -> BUG
-
    return result;
 }
 void parse_item( char* arg , int item_amount)
 {
-     #ifdef debug
-               printf("parse_item function is called");
-     #endif
     struct item_T* C_item;
     char filename[strlen(arg)+1];
     strcpy(filename, arg);

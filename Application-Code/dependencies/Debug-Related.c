@@ -15,7 +15,11 @@
        coin= coin->next_coin;
     }
  }
- void Return_PRINTF(bool arg_state, char* iftrue, char* iffalse ){
+
+ void Display_Weight( float weight ){
+   printf("player max-weight is   :%.3f\n",weight);
+ }
+ void Return_Bstate(bool arg_state, char* iftrue, char* iffalse ){
     if(arg_state){
         printf("%s",iftrue);
     } else  printf("%s",iffalse);
