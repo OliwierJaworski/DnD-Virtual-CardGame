@@ -10,8 +10,8 @@
  }
   void loop_COINLIST( struct Coin_T* coin ){
     while( coin != NULL ){
-       printf("LinkedList, item name  :%s\n",coin->currency);
-       printf("LinkedList, item amount:%d\n",coin->amount);
+       printf("LinkedList, COIN name  :%s\n",coin->currency);
+       printf("LinkedList, COIN amount:%d\n",coin->amount);
        coin= coin->next_coin;
     }
  }

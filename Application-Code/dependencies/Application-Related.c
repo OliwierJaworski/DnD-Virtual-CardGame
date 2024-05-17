@@ -1,5 +1,11 @@
 #include "Application-Related.h"
 #include "Player-Related.h"
+/*struct Coin_T{
+  char* currency;
+  int amount;
+  struct Coin_T* next_coin;
+  struct Coin_T* previous_coin;
+};*/
 void ARG_Parser(int* argc, char** argv)
 {
     if(*argc ==1){
@@ -14,12 +20,17 @@ void ARG_Parser(int* argc, char** argv)
                {
                case 'm':
                     c_argc++;
-                    printf("money is triggered\n");
-                    while(c_argc < *argc && arg_iscoin(argv[c_argc])){
-                        printf("argv :%s\n", argv[c_argc]);
-                        c_argc++;
+                    Player_inv.Coins =( Player_inv.Coins == NULL)? malloc( sizeof(struct Coin_T) ): Player_inv.Coins;
+                    struct Coin_T* current_C = Player_inv.Coins;
+                    while(c_argc < *argc && arg_iscoin(argv[c_argc]))
+                    {
+                        if(c_argc+1 < *argc && arg_iscoin(argv[c_argc+1])){
+                            current_C->next_coin = (current_C->next_coin == NULL)? malloc(sizeof(struct Coin_T)) : current_C->next_coin;
                         }
-                    
+                        current_C->amount = Str_To_Float(argv[c_argc], &current_C->currency);  
+                        current_C = current_C->next_coin;        
+                        c_argc++;
+                    }
                     break;
                case 'w':
                   c_argc++;
@@ -47,7 +58,7 @@ void ARG_Parser(int* argc, char** argv)
                 parse_item( argv[c_argc], item_amount );
             }else if( arg_isitem( argv[c_argc] ) ){
                 parse_item( argv[c_argc], 1 );
-            } else {
+            }else {
                  printUsage( argv[0] );
                  exit(0);
             }
@@ -55,6 +66,7 @@ void ARG_Parser(int* argc, char** argv)
         #ifdef debug
                Display_Weight(Player_inv.weight);
                loop_ITEMLIST(Player_inv.items);
+               loop_COINLIST(Player_inv.Coins);
         #endif
     }
 }
