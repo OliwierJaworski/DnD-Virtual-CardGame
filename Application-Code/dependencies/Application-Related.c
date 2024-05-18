@@ -191,31 +191,31 @@ void printUsage( char *programName )
 }
 void free_alloc( void )
 {
-    /*TO DEALLOC!!*/
-    /*
-    1.CurrentC->currency
-    2.CurrentC->item_t
-    */
+
    if(Player_inv.Coins != NULL){
-      struct Coin_T* old_coin =NULL;
-      struct Coin_T* next_coin = Player_inv.Coins->next_coin;
-      while(next_coin != NULL){
-        old_coin= next_coin;
-        next_coin = next_coin->next_coin;
-        free(old_coin);
+      struct Coin_T* current_coin = Player_inv.Coins;
+      struct Coin_T* next_coin = NULL;
+
+      while( current_coin != NULL ){
+        next_coin= current_coin->next_coin;
+        free(current_coin->currency);
+        free(current_coin);
+        current_coin = next_coin;
       };
     Player_inv.Coins =NULL;
+
    }
 
    if(Player_inv.items != NULL){
-      struct item_T* old_item =NULL;
-      struct item_T* next_item = Player_inv.items->next_item;
-      while(next_item != NULL){
-        old_item= next_item;
-        next_item = next_item->next_item;
-        free(old_item);
+      struct item_T* current_item =Player_inv.items;
+      struct item_T* next_item = NULL;
+
+      while(current_item != NULL){
+        next_item= current_item->next_item;
+        free(current_item->name);
+        free(current_item);
+        current_item = next_item;
       };
     Player_inv.items =NULL;
    }
-    return 0;
 }
