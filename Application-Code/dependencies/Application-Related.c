@@ -37,7 +37,6 @@ void ARG_Parser(int* argc, char** argv)
                          current_C = current_C->next_coin;
                         }
                         current_C->next_coin =malloc(sizeof(struct Coin_T));
-                        printf("current agrptr :%p\n",current_C);
                         if (current_C->next_coin == NULL) {
                             perror("Failed to allocate memory");
                             exit(EXIT_FAILURE);
@@ -49,7 +48,6 @@ void ARG_Parser(int* argc, char** argv)
                     while(c_argc < *argc && arg_iscoin(argv[c_argc]))
                     {
                         current_C->amount = Str_To_Float(argv[c_argc], &current_C->currency); 
-                        printf("current agrv :%s\n",current_C->currency);
                         if( c_argc+1 < *argc && arg_iscoin( argv[c_argc+1] ) ){
                             current_C->next_coin = (current_C->next_coin == NULL)? malloc(sizeof(struct Coin_T)) : current_C->next_coin;
                             if (current_C->next_coin == NULL) {
@@ -69,11 +67,10 @@ void ARG_Parser(int* argc, char** argv)
                     printf("arg :c\n");
                 break;
                case 'x':
-                    exit(0);
                 break;
                 case 'h':
                default:
-                    printUsage( argv[0] );
+                    if(arg_option != 'x') printUsage( argv[0] );
                     exit(0);
                 break;
                }
@@ -121,7 +118,7 @@ float Str_To_Float( char * source_STR, char** excluded_STR )
         }
       C_char++;
     }
-    if( source_STR[C_char] != '\0' ){ 
+    if( source_STR[C_char] != '\0' && excluded_STR != NULL){ 
     *excluded_STR =&source_STR[C_char]; //following format causes segmentation error :
     // *excluded_STR =( source_STR[C_char] != '\0'  )? &source_STR[C_char] : NULL;
     } 
@@ -177,7 +174,7 @@ char optionTOchar( char * option ){
         return 'c';
     if( strcasecmp( "help", option ) == 0 )
         return 'h';
-    if( strcasecmp( "cancel ", option ) == 0 )
+    if( strcasecmp( "exit", option ) == 0 )
         return 'x';
 }
 void printUsage( char *programName )
@@ -189,7 +186,7 @@ void printUsage( char *programName )
 	        "  -w --max-weight <number>          Maximum weight before becoming encumbered\n"
 	        "  -c --camp-file <filename.log>     Optional camp file for all discovered items during play that stay in camp\n"
 	        "  -h --help                         Print this help menu.\n"
-            "  -x --cancel                       exit the application\n",
+            "  -x --exit                       exit the application\n",
 	        programName );
 }
 void free_alloc( void )
