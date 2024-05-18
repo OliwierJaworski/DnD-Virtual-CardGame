@@ -8,19 +8,14 @@
 #include <stdbool.h>
 #include <string.h>
 
-
-
-void ARG_Parser(int* argc, char** argv);
-void printUsage( char *programName );
-char optionTOchar(char * option);
+ void ARG_Parser  (int* argc, char** argv);
+ void printUsage  ( char *programName );
+ char optionTOchar(char * option);
 float Str_To_Float( char * source_STR, char** excluded_STR );
-
-//bool arg_iscoin(char* arg, struct Float_Nleftover* datadump);
-
-bool arg_isitem( char* arg );
-bool arg_iscoin( char *arg );
-void parse_item( char* arg , int item_amount); 
-void free_alloc( void );
+ bool arg_isitem  ( char* arg );
+ bool arg_iscoin  ( char *arg );
+ void parse_item  ( char* arg , int item_amount); 
+ void free_alloc  ( void );
 #endif
 
 

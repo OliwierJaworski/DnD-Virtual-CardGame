@@ -1,11 +1,6 @@
 #include "Application-Related.h"
 #include "Player-Related.h"
-/*struct Coin_T{
-  char* currency;
-  int amount;
-  struct Coin_T* next_coin;
-  struct Coin_T* previous_coin;
-};*/
+
 void ARG_Parser(int* argc, char** argv)
 {
     if(*argc ==1){
@@ -119,8 +114,7 @@ float Str_To_Float( char * source_STR, char** excluded_STR )
       C_char++;
     }
     if( source_STR[C_char] != '\0' && excluded_STR != NULL){ 
-    *excluded_STR =&source_STR[C_char]; //following format causes segmentation error :
-    // *excluded_STR =( source_STR[C_char] != '\0'  )? &source_STR[C_char] : NULL;
+    *excluded_STR =&source_STR[C_char]; 
     } 
     pointvalue = pointvalue / ( pow( 10, quotient ) ); 
     result = wholevalue+pointvalue;
@@ -195,22 +189,20 @@ void free_alloc( void )
    if(Player_inv.Coins != NULL){
       struct Coin_T* current_coin = Player_inv.Coins;
       struct Coin_T* next_coin = NULL;
-
       while( current_coin != NULL ){
         next_coin= current_coin->next_coin;
-        free(current_coin->currency);
         free(current_coin);
         current_coin = next_coin;
       };
     Player_inv.Coins =NULL;
 
    }
-
+ 
    if(Player_inv.items != NULL){
       struct item_T* current_item =Player_inv.items;
       struct item_T* next_item = NULL;
 
-      while(current_item != NULL){
+      while( current_item != NULL ){
         next_item= current_item->next_item;
         free(current_item->name);
         free(current_item);
@@ -218,4 +210,5 @@ void free_alloc( void )
       };
     Player_inv.items =NULL;
    }
+  
 }

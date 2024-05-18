@@ -1,7 +1,6 @@
 #ifndef Data_Related 
 #define Data_Related 
 #define DND_EQUIPMENT_URL "https://www.dnd5eapi.co/api/equipment"
-
 #include <curl/curl.h>
 
 //data-types

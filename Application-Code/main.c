@@ -8,17 +8,20 @@
 
 struct Inventory Player_inv;
 
-int main(int argc, char *argv[])
+int main( int argc, char *argv[] )
 {
+    FILE * fileptr =NULL;
     void (*cleanup_ritual) ( void ) = free_alloc;
     atexit(cleanup_ritual);
 
-    ARG_Parser(&argc, argv);
-
+    ARG_Parser( &argc, argv );
+    fileptr =fopen("equipmentlist.txt","r+");
+    fileptr = (!fileptr) ? fopen("equipmentlist.txt","w+") :fileptr;
+    if( (fgetc( fileptr )) == EOF ){
+        printf("downloading files\n");
+        fetch_url_data(DND_EQUIPMENT_URL, fileptr);
+    } 
+    fclose(fileptr); 
     return free_alloc;
+    
 }
-
-
-
-//FILE * fileptr = fopen("equipment.txt","w");          --DEBUG
-    //fetch_url_data(DND_EQUIPMENT_URL, fileptr);           --DEBUG

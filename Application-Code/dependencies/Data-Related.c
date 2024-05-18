@@ -17,7 +17,6 @@ int fetch_url_data(char * url, FILE * filepointer_CC)
     else throw_error("failed to initialize curl:",INTERNAL_ERROR);
     curl_easy_cleanup(curl);
     fwrite(chunk.response, sizeof(char),chunk.size, filepointer_CC);
-    fclose(filepointer_CC);
     return OK;
 }
 
