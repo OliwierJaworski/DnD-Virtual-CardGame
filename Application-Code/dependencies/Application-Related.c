@@ -213,6 +213,7 @@ void free_alloc( void )
       while( current_item != NULL ){
         next_item= current_item->next_item;
         free(current_item->name);
+        free(current_item->item_url);
         free(current_item);
         current_item = next_item;
       };
