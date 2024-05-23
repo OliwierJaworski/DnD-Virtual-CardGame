@@ -36,7 +36,9 @@ size_t Data_CallBack(void *data, size_t size, size_t nmemb, void *clientp)
  
   return realsize;
 }
-
+void Json_Parse(char* Data_Stream, char** keywords){
+  printf("parsing something idk maybe\n");
+}
 void throw_error(char * err_msg, int err_code){
         perror(err_msg);
         exit(err_code);

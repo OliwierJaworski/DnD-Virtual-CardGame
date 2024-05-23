@@ -1,6 +1,6 @@
 #ifndef Data_Related 
 #define Data_Related 
-#define DND_EQUIPMENT_URL "https://www.dnd5eapi.co/api/equipment"
+#define DND_EQUIPMENT_URL "https://www.dnd5eapi.co/api/equipment/"
 #include <curl/curl.h>
 
 //data-types
@@ -14,6 +14,7 @@ struct memory {
   size_t size;
 };
 struct item_T{
+  char* item_url;
   char* name;
   int amount;
   struct item_T* next_item;
@@ -27,9 +28,11 @@ struct Coin_T{
 };
 
 //functions
-   int fetch_url_data(char * url, FILE * filepointer_CC);
+int fetch_url_data(char * url, FILE * filepointer_CC);
+void Json_Parse(char* Data_Stream, char** keywords);
 size_t Data_CallBack(void *data, size_t size, size_t nmemb, void *clientp);
-  void throw_error(char * err_msg, int err_code);
+void throw_error(char * err_msg, int err_code);
+
 #endif
 
 

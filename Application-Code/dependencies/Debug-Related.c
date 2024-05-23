@@ -5,6 +5,7 @@
  void loop_ITEMLIST( struct item_T* item ){
     while( item != NULL ){
        printf("LinkedList, item name  :%s\n",item->name);
+       printf("LinkedList, item URL  :%s\n",item->item_url);
        printf("LinkedList, item amount:%d\n",item->amount);
        item= item->next_item;
     }
