@@ -38,46 +38,23 @@ void Json_Parse(struct item_T *item, char* stream){
   size_t CATCount=0;
   char** category_ptr = (char**) calloc(CATCount,sizeof(char*));
   char* bufferPTR=NULL;
-  category_ptr[CATCount] = strchr(stream,'{');
-  printf("size of char** : %zu",sizeof(category_ptr));
-  
+  category_ptr[CATCount] = strpbrk(stream,"{}");
 
-  while( (bufferPTR = strchr(category_ptr[CATCount]+1,'{')) != NULL) {
+  while( (bufferPTR = strpbrk(category_ptr[CATCount]+1,"{}")) != NULL) {
       CATCount++;
       category_ptr = realloc(category_ptr, (CATCount+1) * sizeof(char*));
       category_ptr[CATCount] = bufferPTR;
   }
-  printf("\n%s\n",category_ptr[2]);
- 
-  /*
 
- 
-  
+  for( int elem =1; elem<=CATCount; elem++ ){
+      int maxchar=category_ptr[elem]-stream; 
+      printf("\n");
 
-       for(int i; i< CATCount; i++){
-      
-  }
-      
-      category_ptr[CATCount] = calloc(1,sizeof(char*));
-      category_ptr[CATCount] = bufferPTR;
-
-*/
-
-
-/*
-  
-
-      while( strchr(categories_ptr[categories-1]+1,'{') != NULL ) {
-            printf("\nis working still111!!\n");
-            categories_ptr[0]= malloc(sizeof(char*));
-            categories_ptr[categories-1] = strchr(categories_ptr[categories-1]+1,'{');
-            categories++;
-            printf("\nis working still222!!\n");
-            categories_ptr = ((sizeof(categories_ptr) / sizeof(char*)) < categories-1)? realloc(categories_ptr, categories): categories_ptr;
+      for(int i=category_ptr[elem-1]-stream;i<=maxchar; i++){
+            printf("%c",stream[i]);
       }
-      for(int cat=0; cat< categories; cat++){
-            printf("%c\n",categories_ptr[cat]);
-      }*/
+  }
+
 }
 
 
