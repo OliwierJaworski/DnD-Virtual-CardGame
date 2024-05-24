@@ -6,21 +6,21 @@
 #include "dependencies/Application-Related.h"
 #include "dependencies/Player-Related.h"
 
+
 struct Inventory Player_inv;
+struct memory chunk;
 
 int main( int argc, char *argv[] )
-{
-    
-    FILE * fileptr =NULL;
+{   
     void (*cleanup_ritual) ( void ) = free_alloc;
     atexit(cleanup_ritual);
 
     ARG_Parser( &argc, argv );
-    fileptr =fopen("equipmentlist.txt","r+");
-    fileptr = (!fileptr) ? fopen("equipmentlist.txt","w+") :fileptr;
-    if( (fgetc( fileptr )) == EOF ){
-        //fetch_url_data(DND_EQUIPMENT_URL, fileptr);
-    } 
-    fclose(fileptr); 
-    return free_alloc;
+    struct item_T* Curr_Item = Player_inv.items;
+    while(Curr_Item != NULL){
+        Json_Parse(Curr_Item);
+        Curr_Item =Curr_Item->next_item;
+    }
+    free_alloc();
+    return 0;
 }

@@ -156,16 +156,12 @@ void parse_item( char* arg , int item_amount)
     if(loc != NULL){
         *loc = '\0';
     }
-    
 
-    C_item->item_url = malloc((strlen(DND_EQUIPMENT_URL)+1+strlen(filename)));
-    char Buffer_URL[(strlen(DND_EQUIPMENT_URL)+1+strlen(filename))];
-    strcpy(Buffer_URL, DND_EQUIPMENT_URL);
-    strcat(Buffer_URL,filename);
-    strcpy(C_item->item_url, Buffer_URL);
+    C_item->item_url = (char*) malloc((strlen(DND_EQUIPMENT_URL)+1+strlen(filename)));
+    strcpy(C_item->item_url, DND_EQUIPMENT_URL);
+    strcat(C_item->item_url,filename);    
     strcpy(C_item->name, filename);
     C_item->amount = item_amount;
-    C_item->next_item = NULL;
 }
 char optionTOchar( char * option ){
     if( strcasecmp( "money", option ) == 0 )
