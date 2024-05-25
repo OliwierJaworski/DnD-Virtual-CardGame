@@ -241,36 +241,63 @@ void free_alloc( void )
       };
     Player_inv.items =NULL;
    }
+   printf("\n"
+           "       ________________   ___/-\\___     ___/-\\___     ___/-\\___\n"
+           "     / /             ||  |---------|   |---------|   |---------|\n"
+           "    / /              ||   |       |     | | | | |     |   |   |\n"
+           "   / /             __||   |       |     | | | | |     | | | | |\n"
+           "  / /   \\\\         I || |       |     | | | | |     | | | | |\n"
+           " (-------------------||   | | | | |     | | | | |     | | | | |\n"
+           " ||               == ||   |_______|     |_______|     |_______|\n"
+           " ||   CODE TRASH CO  | =============================================\n"
+           " ||          ____    |                                ____      |\n"
+           "( | o      / ____ \\                                 / ____ \\    |)\n"
+           " ||      / / . . \\ \\                              / / . . \\ \\   |\n"
+           "[ |_____| | .   . | |____________________________| | .   . | |__]\n"
+           "          | .   . |                                | .   . |\n"
+           "           \\_____/                                  \\_____/\n");
 }
 
  struct item_T* LL_PUSH(){
-    
+
  }
  struct item_T* LL_POP(){
 
  }
- struct item_T* LL_CYCLE(){
-
+struct item_T* LL_CYCLE(struct item_T *current_item) {
+    if (current_item == NULL) {
+        return NULL;
+    }
+    return current_item->next_item != NULL ? current_item->next_item : Player_inv.items;
+}
+ void userdisplay(struct item_T* displayedItem){
+                struct item_details* next_detail= displayedItem->item_details;
+                printf("current item         :%s\n",displayedItem->name);
+                printf("current item amount  :%d\n",displayedItem->amount);
+                printf("item info:\n");
+                while( next_detail != NULL ){
+                printf("| %s |,description:| %s |,value| %d |\n",next_detail->name,next_detail->description, next_detail->value);
+                next_detail = next_detail->next;
+                }
  }
- void userdisplay(){
+void userinteraction(update_screen screenfunc, struct item_T* Citem) {
+    char command[256];
+    while (1) {
+        screenfunc(Citem);
 
- }
-  
+        printf("Type 'next' to view the next item or 'exit' to quit: ");
+        fgets(command, sizeof(command), stdin);
 
-/*
-       ________________   ___/-\___     ___/-\___     ___/-\___
-     / /             ||  |---------|   |---------|   |---------|
-    / /              ||   |       |     | | | | |     |   |   |
-   / /             __||   |       |     | | | | |     | | | | |
-  / /   \\        I  ||   |       |     | | | | |     | | | | |
- (-------------------||   | | | | |     | | | | |     | | | | |
- ||               == ||   |_______|     |_______|     |_______|
- ||   CODE TRASH CO  | =============================================
- ||          ____    |                                ____      |
-( | o      / ____ \                                 / ____ \    |)
- ||      / / . . \ \                              / / . . \ \   |
-[ |_____| | .   . | |____________________________| | .   . | |__]
-          | .   . |                                | .   . |
-           \_____/                                  \_____/
+        // Remove trailing newline character from the input
+        command[strcspn(command, "\n")] = 0;
 
-}*/
+        if (strcmp(command, "next") == 0) {
+            Citem = LL_CYCLE(Citem);
+        } else if (strcmp(command, "exit") == 0) {
+            exit(0);
+            break;
+        } else {
+            printf("Invalid command. Please type 'next' to continue or 'exit' to quit.\n");
+        }
+    }
+}

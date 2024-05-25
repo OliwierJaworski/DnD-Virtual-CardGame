@@ -5,21 +5,22 @@
 #include "dependencies/Application-Related.h"
 
 
+
 struct Inventory Player_inv;
 struct memory chunk;
-bool keepalive= true;
+bool keepalive= false;
 
 int main( int argc, char *argv[] )
 {   
-    void (*cleanup_ritual) ( void ) = free_alloc;
-    atexit(cleanup_ritual);
+    cleanup_ritual cleanup= free_alloc;
+    atexit(cleanup);
     ARG_Parser( &argc, argv );
 
+    struct item_T* Viewed_Item = Player_inv.items;
+    userinteraction(userdisplay,Viewed_Item);
     while(keepalive){
-        userdisplay();
-        userinteraction();
+        userinteraction(userdisplay,Viewed_Item);
     }
-    
-    free_alloc();
+
     return 0;
 }
