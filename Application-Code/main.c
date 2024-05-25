@@ -17,10 +17,10 @@ int main( int argc, char *argv[] )
 
     ARG_Parser( &argc, argv );
     struct item_T* Curr_Item = Player_inv.items;
-    //while(Curr_Item != NULL){
+    while(Curr_Item != NULL){
         Json_Parse( Curr_Item, JSON_EXAMPLE );
-        //Curr_Item =Curr_Item->next_item;
-    //}
+        Curr_Item =Curr_Item->next_item;
+    }
     free_alloc();
     return 0;
 }

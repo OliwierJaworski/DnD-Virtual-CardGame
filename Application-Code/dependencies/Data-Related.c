@@ -52,7 +52,6 @@ void Json_Parse(struct item_T *item, char* stream) {
         }
 
         File_CC = bufferPTR - previosPTR;
-
         str_buffer = (str_buffer == NULL) ? calloc(File_CC + 1, sizeof(char)) : realloc(str_buffer, File_CC + 1);
         if (str_buffer == NULL) {
             perror("Memory allocation failed");
@@ -62,18 +61,16 @@ void Json_Parse(struct item_T *item, char* stream) {
         strncpy(str_buffer, previosPTR, File_CC);
         str_buffer[File_CC] = '\0'; 
 
-      
         char *key = strtok(str_buffer, ":");
         char *value = strtok(NULL, ":");
-        if (key && value) {
-        
-            key = strtok(key, "\" \t\n");
-            value = strtok(value, "\" \t\n");
+        if (key) {
+            key = strtok(key, "\" \t\n{");
+            value = (value !=NULL)? strtok(value, "\" \t\n"): value;
+            struct item_details* detail = malloc(sizeof(struct item_details));
 
+printf("-->%s, %s \n",key, value);
             if (strcmp(key, "name") == 0 || strcmp(key, "url") == 0) {
-                
-            } else 
-            {
+            } else if(value != NULL) {
                 int valid_int = 1;
                 for (size_t i = 0; i < strlen(value); i++) {
                     if (!isdigit(value[i])) {
@@ -82,15 +79,26 @@ void Json_Parse(struct item_T *item, char* stream) {
                     }
                 }
                
-                struct item_details* detail = malloc(sizeof(struct item_details));
+                
                 detail->name = strdup(key);
-                detail->description = strdup(value);
                 if(valid_int){
                   detail->value = atoi(value); 
-                }else detail->value = -1;
-                detail->next = item->item_details;
-                item->item_details = detail;
+                }else {
+                  detail->value = -1;
+                  detail->description = strdup(value);
+                }
+            } else {
+                  detail->name = strdup(key);
             }
+            if (item->item_details == NULL) {
+                item->item_details = detail;
+                } else {
+                struct item_details* last_detail = item->item_details;
+                while (last_detail->next != NULL) {
+                    last_detail = last_detail->next;
+                }
+                last_detail->next = detail;
+            }   
         }
 
         previosPTR = bufferPTR + 1;
