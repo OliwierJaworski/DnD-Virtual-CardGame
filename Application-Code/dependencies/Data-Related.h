@@ -19,14 +19,23 @@ extern struct memory {
   size_t size;
 }chunk;
 
+struct item_details{
+  char* name;
+  char* description;
+  int value;
+  struct item_details* next;
+};
+
+
 struct item_T{
   char* item_url;
   char* name;
-  char*** item_details;
   int amount;
+  struct item_details* item_details;
   struct item_T* next_item;
   struct item_T* previous_item;
 };
+
 struct Coin_T{
   char* currency;
   int amount;
@@ -38,7 +47,6 @@ struct Coin_T{
 int fetch_url_data(char * url);
 void Json_Parse(struct item_T *item, char* stream);
 size_t Json_Data_CB(void *data, size_t size, size_t nmemb, void *clientp);
-char* substr_to_Scope(int indent, char** destination);
 void throw_error(char * err_msg, int err_code);
 
 #endif

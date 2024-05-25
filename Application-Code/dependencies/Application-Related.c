@@ -201,8 +201,7 @@ void free_alloc( void )
     Player_inv.Coins =NULL;
 
    }
- 
-   if(Player_inv.items != NULL){
+     if(Player_inv.items != NULL){
       struct item_T* current_item =Player_inv.items;
       struct item_T* next_item = NULL;
 
@@ -215,6 +214,9 @@ void free_alloc( void )
       };
     Player_inv.items =NULL;
    }
+}
+    /*
+  
   
 }
 /*

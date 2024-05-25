@@ -50,34 +50,62 @@ void Json_Parse(struct item_T *item, char* stream) {
         if (bufferPTR == NULL) {
             bufferPTR = stream + File_EOF;  
         }
+
         File_CC = bufferPTR - previosPTR;
+
         str_buffer = (str_buffer == NULL) ? calloc(File_CC + 1, sizeof(char)) : realloc(str_buffer, File_CC + 1);
         if (str_buffer == NULL) {
-            perror("memory allocation failed");
+            perror("Memory allocation failed");
             exit(1);
         }
+
         strncpy(str_buffer, previosPTR, File_CC);
-        str_buffer[File_CC] = '\0';
-        printf("%s\n", str_buffer);
+        str_buffer[File_CC] = '\0'; 
+
+      
+        char *key = strtok(str_buffer, ":");
+        char *value = strtok(NULL, ":");
+        if (key && value) {
+        
+            key = strtok(key, "\" \t\n");
+            value = strtok(value, "\" \t\n");
+
+            if (strcmp(key, "name") == 0 || strcmp(key, "url") == 0 || strcmp(key, "quantity") == 0) {
+                
+            } else 
+            {
+                int valid_int = 1;
+                for (size_t i = 0; i < strlen(value); i++) {
+                    if (!isdigit(value[i])) {
+                        valid_int = 0;
+                        break;
+                    }
+                }
+               
+                struct item_details* detail = malloc(sizeof(struct item_details));
+                detail->name = strdup(key);
+                detail->description = strdup(value);
+                if(valid_int){
+                  detail->value = atoi(value); 
+                }else detail->value = -1;
+                detail->next = item->item_details;
+                item->item_details = detail;
+            }
+        }
 
         previosPTR = bufferPTR + 1;
         File_CC = previosPTR - stream;  
     }
+
     free(str_buffer);  
-     
-      
-
-
-
-char* substr_to_Scope(int indent, char** destination){
-
-      
 }
 
-      
+void throw_error(char * err_msg, int err_code){
+  perror(err_msg);
+  exit(err_code);
+}
 
-
-  /*fetch_url_data(item->item_url);
+ /*fetch_url_data(item->item_url);
   printf("\nresponse:%s\n",chunk.response);
 
   if(chunk.response != NULL){
@@ -85,9 +113,3 @@ char* substr_to_Scope(int indent, char** destination){
   chunk.response= NULL;
   chunk.size=0;
   }*/
-
-void throw_error(char * err_msg, int err_code){
-  perror(err_msg);
-  exit(err_code);
-}
-
