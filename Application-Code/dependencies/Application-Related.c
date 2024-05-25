@@ -205,6 +205,14 @@ void free_alloc( void )
       struct item_T* current_item =Player_inv.items;
       struct item_T* next_item = NULL;
 
+     struct item_details* current_detail =Player_inv.items->item_details;
+     struct item_details* next_detail= NULL;
+     while( current_detail != NULL ){
+        printf("key: %s, value:%d, description:%s\n",current_detail->name, current_detail->value,current_detail->description);
+       current_detail = current_detail->next;
+     }
+
+
       while( current_item != NULL ){
         next_item= current_item->next_item;
         free(current_item->name);

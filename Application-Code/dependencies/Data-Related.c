@@ -70,7 +70,7 @@ void Json_Parse(struct item_T *item, char* stream) {
             key = strtok(key, "\" \t\n");
             value = strtok(value, "\" \t\n");
 
-            if (strcmp(key, "name") == 0 || strcmp(key, "url") == 0 || strcmp(key, "quantity") == 0) {
+            if (strcmp(key, "name") == 0 || strcmp(key, "url") == 0) {
                 
             } else 
             {
