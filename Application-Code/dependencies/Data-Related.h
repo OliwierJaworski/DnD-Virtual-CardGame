@@ -4,8 +4,6 @@
 #include <curl/curl.h>
 #include <string.h>
 #include <stdlib.h>
-#include "Player-Related.h"
-#define JSON_EXAMPLE "{\"desc\":[],\"special\":[],\"index\":\"shield\",\"name\":\"Shield\",\"equipment_category\":{\"index\":\"armor\",\"name\":\"Armor\",\"url\":\"/api/equipment-categories/armor\"},\"armor_category\":\"Shield\",\"armor_class\":{\"base\":2,\"dex_bonus\":false},\"str_minimum\":0,\"stealth_disadvantage\":false,\"weight\":6,\"cost\":{\"quantity\":10,\"unit\":\"gp\"},\"url\":\"/api/equipment/shield\",\"contents\":[],\"properties\":[]}"
 
 //data-types
 enum ACK_TYPE{
@@ -26,7 +24,6 @@ struct item_details{
   struct item_details* next;
 };
 
-
 struct item_T{
   char* item_url;
   char* name;
@@ -42,6 +39,12 @@ struct Coin_T{
   struct Coin_T* next_coin;
   struct Coin_T* previous_coin;
 };
+
+extern struct Inventory{
+  struct item_T* items;
+  struct Coin_T* Coins;
+  float weight;
+}Player_inv;
 
 //functions
 int fetch_url_data(char * url);

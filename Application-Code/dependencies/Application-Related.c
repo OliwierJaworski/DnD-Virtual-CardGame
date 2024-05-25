@@ -1,5 +1,5 @@
 #include "Application-Related.h"
-#include "Player-Related.h"
+
 
 void ARG_Parser(int* argc, char** argv)
 {
@@ -84,6 +84,23 @@ void ARG_Parser(int* argc, char** argv)
                  exit(0);
             }
         }
+        struct item_T* Curr_Item = Player_inv.items;
+        while(Curr_Item != NULL){
+            fetch_url_data(Curr_Item->item_url);
+            Json_Parse( Curr_Item, chunk.response);
+            #ifdef debug
+            printf("\nresponse:%s\n",chunk.response);
+            printf("\ncurrent item ptr:%p\n",Curr_Item);
+            #endif
+            
+            Curr_Item =Curr_Item->next_item;
+            
+            if(chunk.response != NULL){
+            free(chunk.response);
+            chunk.response= NULL;
+            chunk.size=0;
+            }
+        }
         #ifdef debug
                Display_Weight(Player_inv.weight);
                loop_ITEMLIST(Player_inv.items);
@@ -159,7 +176,7 @@ void parse_item( char* arg , int item_amount)
 
     C_item->item_url = (char*) malloc((strlen(DND_EQUIPMENT_URL)+1+strlen(filename)));
     strcpy(C_item->item_url, DND_EQUIPMENT_URL);
-    strcat(C_item->item_url,filename);    
+    strcat(C_item->item_url,filename);  
     strcpy(C_item->name, filename);
     C_item->amount = item_amount;
 }
@@ -209,13 +226,14 @@ void free_alloc( void )
       while( current_item != NULL ){
         next_item= current_item->next_item;
         
+        #ifdef debug
                 struct item_details* current_detail = current_item->item_details;
                 struct item_details* next_detail= NULL;
                 while( current_detail != NULL ){
                 printf("key: %s, value:%d, description:%s\n",current_detail->name, current_detail->value,current_detail->description);
                 current_detail = current_detail->next;
                 }
-                
+        #endif        
         free(current_item->name);
         free(current_item->item_url);
         free(current_item);
@@ -224,10 +242,21 @@ void free_alloc( void )
     Player_inv.items =NULL;
    }
 }
-    /*
+
+ struct item_T* LL_PUSH(){
+    
+ }
+ struct item_T* LL_POP(){
+
+ }
+ struct item_T* LL_CYCLE(){
+
+ }
+ void userdisplay(){
+
+ }
   
-  
-}
+
 /*
        ________________   ___/-\___     ___/-\___     ___/-\___
      / /             ||  |---------|   |---------|   |---------|

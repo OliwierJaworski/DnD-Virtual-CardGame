@@ -16,6 +16,12 @@ float Str_To_Float( char * source_STR, char** excluded_STR );
  bool arg_iscoin  ( char *arg );
  void parse_item  ( char* arg , int item_amount); 
  void free_alloc  ( void );
+
+ struct item_T* LL_PUSH();
+ struct item_T* LL_POP();
+ struct item_T* LL_CYCLE();
+ void userdisplay();
+ void userinteraction();
 #endif
 
 

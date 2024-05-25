@@ -33,77 +33,7 @@ size_t Json_Data_CB(void *data, size_t size, size_t nmemb, void *clientp)
   mem->response[mem->size] = 0;
   return realsize;
 }
-/*
-void Json_Parse(struct item_T *item, char* stream) {
-    size_t File_EOF = (strrchr(stream, '}') - stream);
-    if (!File_EOF) {
-        perror("file format not recognised");
-        exit(1);
-    }
-    size_t File_CC = 0;
-    char* bufferPTR = NULL;
-    char* previosPTR = stream;
-    char* str_buffer = NULL;
 
-    while (File_CC <= File_EOF) {
-        bufferPTR = strpbrk(previosPTR + 1, ",{");
-        if (bufferPTR == NULL) {
-            bufferPTR = stream + File_EOF;  
-        }
-
-        File_CC = bufferPTR - previosPTR;
-        str_buffer = (str_buffer == NULL) ? calloc(File_CC + 1, sizeof(char)) : realloc(str_buffer, File_CC + 1);
-        if (str_buffer == NULL) {
-            perror("Memory allocation failed");
-            exit(1);
-        }
-
-        strncpy(str_buffer, previosPTR, File_CC);
-        str_buffer[File_CC] = '\0'; 
-
-        char *key = strtok(str_buffer, ":");
-        char *value = strtok(NULL, ":");
-        if (key) {
-            key = strtok(key, "\" \t\n{");
-            value = (value !=NULL)? strtok(value, "\" \t\n"): value;
-            struct item_details* detail = malloc(sizeof(struct item_details));
-            if (strcmp(key, "name") == 0 || strcmp(key, "url") == 0) {
-            } else if(value != NULL) {
-                int valid_int = 1;
-                for (size_t i = 0; i < strlen(value); i++) {
-                    if (!isdigit(value[i])) {
-                        valid_int = 0;
-                        break;
-                    }
-                }
-               
-                detail->name = strdup(key);
-                if(valid_int){
-                  detail->value = atoi(value); 
-                }else {
-                  detail->value = -1;
-                  detail->description = strdup(value);
-                }
-            } else {
-                  detail->name = strdup(key);
-            }
-            if (item->item_details == NULL) {
-                item->item_details = detail;
-                } else {
-                struct item_details* last_detail = item->item_details;
-                while (last_detail->next != NULL) {
-                    last_detail = last_detail->next;
-                }
-                last_detail->next = detail;
-            }   
-        }
-
-        previosPTR = bufferPTR + 1;
-        File_CC = previosPTR - stream;  
-    }
-
-    free(str_buffer);  
-}*/
 void Json_Parse(struct item_T *item, char* stream) {
     size_t File_EOF = (strrchr(stream, '}') - stream);
     if (!File_EOF) {
