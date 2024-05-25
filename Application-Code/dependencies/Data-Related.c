@@ -34,28 +34,38 @@ size_t Json_Data_CB(void *data, size_t size, size_t nmemb, void *clientp)
   return realsize;
 }
 
-void Json_Parse(struct item_T *item, char* stream){
-  size_t CATCount=0;
-  char** category_ptr = (char**) calloc(CATCount,sizeof(char*));
-  char* bufferPTR=NULL;
-  category_ptr[CATCount] = strpbrk(stream,"{}");
+void Json_Parse(struct item_T *item, char* stream) {
+    size_t File_EOF = (strrchr(stream, '}') - stream);
+    if (!File_EOF) {
+        perror("file format not recognised");
+        exit(1);
+    }
+    size_t File_CC = 0;
+    char* bufferPTR = NULL;
+    char* previosPTR = stream;
+    char* str_buffer = NULL;
 
-  while( (bufferPTR = strpbrk(category_ptr[CATCount]+1,"{}")) != NULL) {
-      CATCount++;
-      category_ptr = realloc(category_ptr, (CATCount+1) * sizeof(char*));
-      category_ptr[CATCount] = bufferPTR;
-  }
+    while (File_CC <= File_EOF) {
+        bufferPTR = strpbrk(previosPTR + 1, ",{");
+        if (bufferPTR == NULL) {
+            bufferPTR = stream + File_EOF;  
+        }
+        File_CC = bufferPTR - previosPTR;
+        str_buffer = (str_buffer == NULL) ? calloc(File_CC + 1, sizeof(char)) : realloc(str_buffer, File_CC + 1);
+        if (str_buffer == NULL) {
+            perror("memory allocation failed");
+            exit(1);
+        }
+        strncpy(str_buffer, previosPTR, File_CC);
+        str_buffer[File_CC] = '\0';
+        printf("%s\n", str_buffer);
 
-  for( int elem =1; elem<=CATCount; elem++ ){
-      int maxchar=category_ptr[elem]-stream; 
-      printf("\n");
-
-      for(int i=category_ptr[elem-1]-stream;i<=maxchar; i++){
-            printf("%c",stream[i]);
-      }
-  }
-
-}
+        previosPTR = bufferPTR + 1;
+        File_CC = previosPTR - stream;  
+    }
+    free(str_buffer);  
+     
+      
 
 
 
