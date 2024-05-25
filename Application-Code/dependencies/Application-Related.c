@@ -150,7 +150,7 @@ void parse_item( char* arg , int item_amount)
         C_item->next_item = malloc(sizeof(struct item_T));
         C_item = C_item->next_item;
     }
-
+    
     C_item->name = malloc(strlen(filename)+1);
     char *loc = strstr(filename, ".json");
     if(loc != NULL){
@@ -204,17 +204,18 @@ void free_alloc( void )
      if(Player_inv.items != NULL){
       struct item_T* current_item =Player_inv.items;
       struct item_T* next_item = NULL;
-/*
-     struct item_details* current_detail =Player_inv.items->item_details;
-     struct item_details* next_detail= NULL;
-     while( current_detail != NULL ){
-        printf("key: %s, value:%d, description:%s\n",current_detail->name, current_detail->value,current_detail->description);
-       current_detail = current_detail->next;
-     }
-*/
+
 
       while( current_item != NULL ){
         next_item= current_item->next_item;
+        
+                struct item_details* current_detail = current_item->item_details;
+                struct item_details* next_detail= NULL;
+                while( current_detail != NULL ){
+                printf("key: %s, value:%d, description:%s\n",current_detail->name, current_detail->value,current_detail->description);
+                current_detail = current_detail->next;
+                }
+                
         free(current_item->name);
         free(current_item->item_url);
         free(current_item);
