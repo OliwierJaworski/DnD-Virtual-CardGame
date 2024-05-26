@@ -17,10 +17,11 @@ int main( int argc, char *argv[] )
     ARG_Parser( &argc, argv );
 
     struct item_T* Viewed_Item = Player_inv.items;
+    printf("\n");
+    printf("welcome!\n");
     userinteraction(userdisplay,Viewed_Item);
-    while(keepalive){
-        userinteraction(userdisplay,Viewed_Item);
-    }
+    
+    
 
     return 0;
 }

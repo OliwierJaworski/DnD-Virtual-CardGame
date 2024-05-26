@@ -55,14 +55,15 @@ void ARG_Parser(int* argc, char** argv)
                     }
                     break;
                case 'w':
+                  
+                  if( c_argc+1 < *argc   ){
                   c_argc++;
-                  Player_inv.weight = Str_To_Float(argv[c_argc], NULL);
+                  Player_inv.weight = Str_To_Float(argv[c_argc], NULL);}
                 break;
                case 'c':
-                    printf("arg :c\n");
+                    printf("Code for arg: c seems to be missing\n");
                 break;
-               case 'x':
-                break;
+                case 'x':
                 case 'h':
                default:
                     if(arg_option != 'x') printUsage( argv[0] );
@@ -206,7 +207,6 @@ void printUsage( char *programName )
 }
 void free_alloc( void )
 {
-
    if(Player_inv.Coins != NULL){
       struct Coin_T* current_coin = Player_inv.Coins;
       struct Coin_T* next_coin = NULL;
@@ -233,7 +233,16 @@ void free_alloc( void )
                 printf("key: %s, value:%d, description:%s\n",current_detail->name, current_detail->value,current_detail->description);
                 current_detail = current_detail->next;
                 }
-        #endif        
+        #endif
+        struct item_details* current_detail = current_item->item_details;
+            struct item_details* next_detail = NULL;
+            while (current_detail != NULL) {
+                next_detail = current_detail->next;
+                free(current_detail->name);
+                free(current_detail->description);
+                free(current_detail);
+                current_detail = next_detail;
+            }        
         free(current_item->name);
         free(current_item->item_url);
         free(current_item);
@@ -264,22 +273,35 @@ void free_alloc( void )
  struct item_T* LL_POP(){
 
  }
+
 struct item_T* LL_CYCLE(struct item_T *current_item) {
     if (current_item == NULL) {
         return NULL;
     }
     return current_item->next_item != NULL ? current_item->next_item : Player_inv.items;
 }
+
  void userdisplay(struct item_T* displayedItem){
-                struct item_details* next_detail= displayedItem->item_details;
-                printf("current item         :%s\n",displayedItem->name);
-                printf("current item amount  :%d\n",displayedItem->amount);
-                printf("item info:\n");
-                while( next_detail != NULL ){
-                printf("| %s |,description:| %s |,value| %d |\n",next_detail->name,next_detail->description, next_detail->value);
-                next_detail = next_detail->next;
-                }
+
+struct Coin_T* current_coin = Player_inv.Coins;
+     printf("your maximum weightlimit is %f\n",Player_inv.weight);
+    printf("this is what you brought with you\n");
+    while (current_coin != NULL) {
+      printf("Currency: %s, Amount: %d\n", current_coin->currency, current_coin->amount);
+         current_coin = current_coin->next_coin;
+    }
+    printf("\n");
+    struct item_details* next_detail= displayedItem->item_details;
+    printf("current item         :%s\n",displayedItem->name);
+    printf("current item amount  :%d\n",displayedItem->amount);
+    printf("item info:\n");
+    while( next_detail != NULL ){
+    printf("| %s |,description:| %s |,value| %d |\n",next_detail->name,next_detail->description, next_detail->value);
+    next_detail = next_detail->next;
+    }
  }
+ 
+
 void userinteraction(update_screen screenfunc, struct item_T* Citem) {
     char command[256];
     while (1) {
@@ -288,7 +310,7 @@ void userinteraction(update_screen screenfunc, struct item_T* Citem) {
         printf("Type 'next' to view the next item or 'exit' to quit: ");
         fgets(command, sizeof(command), stdin);
 
-        // Remove trailing newline character from the input
+        
         command[strcspn(command, "\n")] = 0;
 
         if (strcmp(command, "next") == 0) {
